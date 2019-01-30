@@ -72,7 +72,7 @@ class Form extends Component {
         <hr />
         {
           counters.length === 0 ?
-            <p className="subtitle is-6">{'Click the add button for a new counter.'}</p>
+            <p className="subtitle is-6">{'Click add button for a new counter.'}</p>
             :
             counters.map(c => 
             (<Counter key={c.id} id={c.id} name={c.name} value={c.value} 
