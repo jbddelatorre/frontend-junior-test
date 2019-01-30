@@ -15,7 +15,7 @@ class Form extends Component {
     const state = { ...this.state }
     const name = state.currentCounterName || 'Nameless Counter'
     const counterList = state.counters
-    const id = counterList.length
+    const id = Date.now()
     const newCounter = { id, name, value: 0 }
 
     counterList.push(newCounter)
