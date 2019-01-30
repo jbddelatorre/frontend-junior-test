@@ -7,49 +7,79 @@ class Form extends Component {
     
     this.state = {
         currentCounterName: "",
-        counters:[]
+        counters:[],
+        sum: 0
     }
   }
 
-  handleAddCounter = async () => {
+  handleAddCounter = () => {
     const state = { ...this.state }
-    const name = state.currentCounterName
+    const name = state.currentCounterName || 'Nameless Counter'
     const counterList = state.counters
-    const id = counterList.length + 1 || 1
-    const newCounter = { name, key: id, value: 0 }
+    const id = counterList.length
+    const newCounter = { id, name, value: 0 }
 
     counterList.push(newCounter)
-    await this.setState({
+    this.setState({
+      ...state,
       currentCounterName: "",
       counters: counterList
     })
-    console.log(this.state)
   }
 
-  handleInc = () => {
+  handleCounter = (id, type) => {
+    const state = { ...this.state }
+    let counterList = state.counters
+    const index = counterList.findIndex(c => c.id === id)
+    const counter = counterList[index]
 
-  }
+    switch(type){
+      case 'inc':
+        counter.value += 1
+        break
+      case 'dec':
+        counter.value -= 1
+        break
+      case 'delete':
+        counterList = counterList.filter(c => c.id !== id)
+        break
+      default:
+        break
+    }
 
-  handleDec = () => {
-
+    state.sum = counterList.reduce((acc, cur) => (acc + cur.value), 0)
+    this.setState({...state, counters: counterList})  
   }
 
   render() {
-    const { currentCounterName, counters } = this.state
+    const { currentCounterName, counters, sum } = this.state
 
     return (
       <form>
         <label className="label" htmlFor="name">
           Counter Name
         </label>
-        <input className="input" type="text" placeholder="Counter Name" value={currentCounterName} onChange={e => this.setState({ currentCounterName: e.target.value })}/>
+        <div className="columns">
+          <div className="column">
+            <input className="input" type="text" placeholder="Counter Name" value={currentCounterName} onChange={e => this.setState({ currentCounterName: e.target.value })}/>
+          </div>
+          <div className="column">
+            <a className="button is-primary" onClick={this.handleAddCounter}>Add</a>
+          </div>
+        </div>
 
-        <a className="button is-primary" onClick={this.handleAddCounter}>Add</a>
-
+        <p className="subtitle is-5">{`Counter Sum: ${sum}`}</p>
         <hr />
-
         {
-          counters.map(c => <Counter key={c.key} name={c.name} value={c.value} handleInc={() => this.handleInc()} handleDec={this.handleDec}/>)
+          counters.length === 0 ?
+            <p className="subtitle is-6">{'Click the add button for a new counter.'}</p>
+            :
+            counters.map(c => 
+            (<Counter key={c.id} id={c.id} name={c.name} value={c.value} 
+              handleInc={(id) => this.handleCounter(id, 'inc')} 
+              handleDec={(id) => this.handleCounter(id, 'dec')}
+              handleDelete={(id) => this.handleCounter(id, 'delete')} />
+            ))
         }
       </form>
     );
