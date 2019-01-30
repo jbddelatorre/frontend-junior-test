@@ -4,7 +4,6 @@ import Counter from './Counter'
 class Form extends Component {
   constructor(props) {
     super(props)
-    
     this.state = {
         currentCounterName: "",
         counters:[],
@@ -53,7 +52,6 @@ class Form extends Component {
 
   render() {
     const { currentCounterName, counters, sum } = this.state
-
     return (
       <form>
         <label className="label" htmlFor="name">
