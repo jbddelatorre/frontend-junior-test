@@ -6,7 +6,7 @@ import Form from "./components/Form";
 class App extends Component {
   render() {
     return (
-      <section class="section">
+      <section className="section">
         <div className="container">
           <Form />
         </div>
